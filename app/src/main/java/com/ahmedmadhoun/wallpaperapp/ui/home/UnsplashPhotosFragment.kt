@@ -9,6 +9,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import com.ahmedmadhoun.wallpaperapp.R
 import com.ahmedmadhoun.wallpaperapp.databinding.FragmentUnsplashPhotosBinding
@@ -100,7 +101,8 @@ class UnsplashPhotosFragment : Fragment(R.layout.fragment_unsplash_photos),
     }
 
     override fun onItemClick(unsplashPhoto: UnsplashPhoto) {
-        Toast.makeText(context, "Item Clicked ${unsplashPhoto.id}", Toast.LENGTH_SHORT).show()
+        val action = UnsplashPhotosFragmentDirections.actionUnsplashPhotosFragmentToUnsplashPhotoDetailsFragment(unsplashPhoto)
+        findNavController().navigate(action)
     }
 
 }

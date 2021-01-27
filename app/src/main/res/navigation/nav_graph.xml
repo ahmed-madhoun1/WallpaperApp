@@ -10,5 +10,18 @@
         android:id="@+id/unsplashPhotosFragment"
         android:name="com.ahmedmadhoun.wallpaperapp.ui.home.UnsplashPhotosFragment"
         android:label="Home"
-        tools:layout="@layout/fragment_unsplash_photos" />
+        tools:layout="@layout/fragment_unsplash_photos" >
+        <action
+            android:id="@+id/action_unsplashPhotosFragment_to_unsplashPhotoDetailsFragment"
+            app:destination="@id/unsplashPhotoDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/unsplashPhotoDetailsFragment"
+        android:name="com.ahmedmadhoun.wallpaperapp.ui.details.UnsplashPhotoDetailsFragment"
+        android:label="Photo"
+        tools:layout="@layout/fragment_unsplash_photo_details" >
+        <argument
+            android:name="unsplashPhoto"
+            app:argType="com.ahmedmadhoun.wallpaperapp.model.UnsplashPhoto" />
+    </fragment>
 </navigation>

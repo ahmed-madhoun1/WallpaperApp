@@ -79,6 +79,8 @@ dependencies {
     def glide_version = "4.11.0"
     implementation "com.github.bumptech.glide:glide:$glide_version"
 
+    // Dexter
+    implementation 'com.karumi:dexter:6.2.2'
 
 }
 
