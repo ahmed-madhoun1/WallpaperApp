@@ -33,7 +33,7 @@
         android:id="@+id/btn_download_photo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
@@ -41,11 +41,12 @@
         android:padding="10dp"
         android:text="Download"
         android:textSize="20dp"
-        app:cornerRadius="10dp"
         android:visibility="gone"
+        app:cornerRadius="10dp"
         app:icon="@drawable/ic_download"
         app:iconGravity="textStart"
         tools:visibility="visible" />
+
 
     <ProgressBar
         android:id="@+id/progress_bar"

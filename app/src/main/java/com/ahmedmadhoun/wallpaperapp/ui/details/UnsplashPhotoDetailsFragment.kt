@@ -2,16 +2,22 @@ package com.ahmedmadhoun.wallpaperapp.ui.details
 
 import android.Manifest
 import android.app.DownloadManager
+import android.app.WallpaperManager
 import android.content.Context
+import android.content.pm.PackageManager
 import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
@@ -31,11 +37,16 @@ import com.karumi.dexter.listener.single.PermissionListener
 import kotlinx.android.synthetic.main.fragment_unsplash_photo_details.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.io.File
+import java.io.IOException
+import java.net.HttpURLConnection
+import java.net.URL
+import kotlin.random.Random
 
 
 class UnsplashPhotoDetailsFragment : Fragment(R.layout.fragment_unsplash_photo_details) {
@@ -44,6 +55,7 @@ class UnsplashPhotoDetailsFragment : Fragment(R.layout.fragment_unsplash_photo_d
         private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1
     }
 
+    private lateinit var mContext: Context
 
     private val args by navArgs<UnsplashPhotoDetailsFragmentArgs>()
     private var _binding: FragmentUnsplashPhotoDetailsBinding? = null
@@ -64,14 +76,12 @@ class UnsplashPhotoDetailsFragment : Fragment(R.layout.fragment_unsplash_photo_d
                 askPermission()
             }
         }
-
-
     }
 
     private fun downloadPhoto(url: String) {
-        val directory = File(Environment.DIRECTORY_PICTURES)
-        if (!directory.exists()) {
-            directory.mkdirs()
+        val directoryPictures = File(Environment.DIRECTORY_PICTURES)
+        if (!directoryPictures.exists()) {
+            directoryPictures.mkdirs()
         }
         val downloadManager =
             requireContext().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
@@ -82,7 +92,7 @@ class UnsplashPhotoDetailsFragment : Fragment(R.layout.fragment_unsplash_photo_d
                 setTitle(url.substring(url.lastIndexOf("/") + 1))
                 setDescription("")
                 setDestinationInExternalPublicDir(
-                    directory.toString(),
+                    directoryPictures.toString(),
                     url.substring(url.lastIndexOf("/") + 1)
                 )
             }
@@ -91,7 +101,7 @@ class UnsplashPhotoDetailsFragment : Fragment(R.layout.fragment_unsplash_photo_d
         val downloadId = downloadManager.enqueue(request)
         val query = DownloadManager.Query().setFilterById(downloadId)
 
-        job = CoroutineScope(IO).launch {
+        job = CoroutineScope(Default).launch {
             var downloading = true
             while (downloading) {
                 val cursor: Cursor = downloadManager.query(query)
@@ -102,21 +112,22 @@ class UnsplashPhotoDetailsFragment : Fragment(R.layout.fragment_unsplash_photo_d
                 val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
                 msg = statusMessage(status)
                 if (msg != lastMsg) {
-                    job = CoroutineScope(Main).launch {
-                        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+                    try {
+                        job = CoroutineScope(Main).launch {
+                            Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show()
+                        }
+                    } catch (e: Exception) {
+                        Log.e("AM", "downloadPhoto: ${e.message}")
                     }
                     lastMsg = msg ?: ""
                 }
                 cursor.close()
             }
         }
-
-
     }
 
-    private fun statusMessage(status: Int): String? {
-        var msg = ""
-        msg = when (status) {
+    private fun statusMessage(status: Int): String {
+        return when (status) {
             DownloadManager.STATUS_FAILED -> "Download has been failed, please try again"
             DownloadManager.STATUS_PAUSED -> "Paused"
             DownloadManager.STATUS_PENDING -> "Pending"
@@ -124,7 +135,6 @@ class UnsplashPhotoDetailsFragment : Fragment(R.layout.fragment_unsplash_photo_d
             DownloadManager.STATUS_SUCCESSFUL -> "Image downloaded successfully"
             else -> "There's nothing to download"
         }
-        return msg
     }
 
     private fun askPermission() {
@@ -136,27 +146,32 @@ class UnsplashPhotoDetailsFragment : Fragment(R.layout.fragment_unsplash_photo_d
                 }
 
                 override fun onPermissionDenied(response: PermissionDeniedResponse?) {
-                    AlertDialog.Builder(requireContext())
-                        .setTitle("Permission required")
-                        .setMessage("Permission required to save photos from the Web.")
-                        .setPositiveButton("Accept") { dialog, id ->
-                            ActivityCompat.requestPermissions(
-                                requireActivity(),
-                                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                                MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE
-                            )
-                            dialog.dismiss()
-                        }
-                        .setNegativeButton("Deny") { dialog, id -> dialog.cancel() }
-                        .show()
+                    alertDialogForDownloadPhotoPermission()
                 }
 
                 override fun onPermissionRationaleShouldBeShown(
                     request: PermissionRequest?,
                     token: PermissionToken?
                 ) {
+                    token?.continuePermissionRequest()
                 }
             }).check()
+    }
+
+    private fun alertDialogForDownloadPhotoPermission() {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Permission required")
+            .setMessage("Permission required to save photos.")
+            .setPositiveButton("Accept") { dialog, id ->
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE
+                )
+                dialog.dismiss()
+            }
+            .setNegativeButton("Deny") { dialog, id -> dialog.cancel() }
+            .show()
     }
 
     private fun setPhotoToImageView() {
@@ -189,13 +204,17 @@ class UnsplashPhotoDetailsFragment : Fragment(R.layout.fragment_unsplash_photo_d
 
                 })
                 .into(image_view_details)
-
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         job = Job()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
     }
 
     override fun onDestroyView() {

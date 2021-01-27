@@ -2,4 +2,30 @@
     <string name="app_name">Wallpaper App</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="text_all">All</string>
+    <string name="text_animals">Animals</string>
+    <string name="text_nature">Nature</string>
+    <string name="text_people">People</string>
+    <string name="text_wallpapers">Wallpapers</string>
+    <string name="text_technology">Technology</string>
+    <string name="text_new_skills">New Skills</string>
+    <string name="text_current_events">Current Events</string>
+    <string name="text_architecture">Architecture</string>
+    <string name="text_fashion">Fashion</string>
+    <string name="text_experimental">Experimental</string>
+    <string name="text_film">Film</string>
+    <string name="text_travel">Travel</string>
+    <string name="text_history">History</string>
+    <string name="text_spirituality">Spirituality</string>
+    <string name="text_street_photography">Street Photography</string>
+    <string name="text_athletics">Athletics</string>
+    <string name="text_interiors">Interiors</string>
+    <string name="text_textures_amp_patterns"><![CDATA[Textures & Patterns]]></string>
+    <string name="text_arts_amp_culture"><![CDATA[Arts & Culture]]></string>
+    <string name="text_food_amp_drink"><![CDATA[Food & Drink]]></string>
+    <string name="text_health_amp_wellness"><![CDATA[Health & Wellness]]></string>
+    <string name="text_business_amp_work"><![CDATA[Business & Work]]></string>
+
 </resources>
