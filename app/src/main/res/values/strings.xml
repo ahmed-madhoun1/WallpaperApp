@@ -22,10 +22,16 @@
     <string name="text_street_photography">Street Photography</string>
     <string name="text_athletics">Athletics</string>
     <string name="text_interiors">Interiors</string>
+
     <string name="text_textures_amp_patterns"><![CDATA[Textures & Patterns]]></string>
+    <string name="text_textures_and_patterns">Textures And Patterns></string>
     <string name="text_arts_amp_culture"><![CDATA[Arts & Culture]]></string>
+    <string name="text_arts_and_culture">Arts And Culture</string>
     <string name="text_food_amp_drink"><![CDATA[Food & Drink]]></string>
+    <string name="text_food_and_drink">Food And Drink</string>
     <string name="text_health_amp_wellness"><![CDATA[Health & Wellness]]></string>
+    <string name="text_health_and_wellness">Health And Wellness</string>
     <string name="text_business_amp_work"><![CDATA[Business & Work]]></string>
+    <string name="text_business_and_work">Business And Work</string>
 
 </resources>
