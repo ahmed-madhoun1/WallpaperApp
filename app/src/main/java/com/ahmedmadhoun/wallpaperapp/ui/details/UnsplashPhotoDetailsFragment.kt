@@ -2,12 +2,8 @@ package com.ahmedmadhoun.wallpaperapp.ui.details
 
 import android.Manifest
 import android.app.DownloadManager
-import android.app.WallpaperManager
 import android.content.Context
-import android.content.pm.PackageManager
 import android.database.Cursor
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
@@ -17,12 +13,13 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.ahmedmadhoun.wallpaperapp.R
 import com.ahmedmadhoun.wallpaperapp.databinding.FragmentUnsplashPhotoDetailsBinding
+import com.ahmedmadhoun.wallpaperapp.utils.ConnectionType
+import com.ahmedmadhoun.wallpaperapp.utils.NetworkMonitor
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -30,8 +27,6 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.OnUserEarnedRewardListener
-import com.google.android.gms.ads.rewarded.RewardItem
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.karumi.dexter.Dexter
@@ -40,21 +35,17 @@ import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_unsplash_photo_details.*
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.Default
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.io.File
-import java.io.IOException
-import java.net.HttpURLConnection
-import java.net.URL
-import kotlin.random.Random
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class UnsplashPhotoDetailsFragment : Fragment(R.layout.fragment_unsplash_photo_details) {
 
     companion object {
@@ -63,14 +54,18 @@ class UnsplashPhotoDetailsFragment : Fragment(R.layout.fragment_unsplash_photo_d
 
     private lateinit var mContext: Context
     private val TAG = "AM"
-
     private val args by navArgs<UnsplashPhotoDetailsFragmentArgs>()
     private var _binding: FragmentUnsplashPhotoDetailsBinding? = null
     private val binding get() = _binding!!
     var msg: String? = ""
     var lastMsg = ""
-    private lateinit var job: Job
     private lateinit var mRewardedAd: RewardedAd
+
+    @Inject
+    lateinit var job: Job
+
+    @Inject
+    lateinit var networkMonitor: NetworkMonitor
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -246,9 +241,57 @@ class UnsplashPhotoDetailsFragment : Fragment(R.layout.fragment_unsplash_photo_d
             })
     }
 
+    private fun checkInternetConnection() {
+        networkMonitor.result = { isAvailable, type ->
+            job = CoroutineScope(Main).launch {
+                when (isAvailable) {
+                    true -> {
+                        when (type) {
+                            ConnectionType.Wifi -> {
+                                internetAvailable()
+                            }
+                            ConnectionType.Cellular -> {
+                                internetAvailable()
+                            }
+                            else -> {
+                            }
+                        }
+                    }
+                    false -> {
+                        internetUnavailable()
+                    }
+                }
+            }
+
+        }
+
+    }
+
+    private fun internetUnavailable() {
+        networkMonitor.snackbar.show()
+        binding.btnDownloadPhoto.isVisible = false
+    }
+
+    private fun internetAvailable() {
+        networkMonitor.snackbar.dismiss()
+        binding.btnDownloadPhoto.isVisible = true
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        job = Job()
+        // Check Internet Connection
+        checkInternetConnection()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        networkMonitor.register()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        networkMonitor.unregister()
+        internetAvailable()
     }
 
     override fun onAttach(context: Context) {
