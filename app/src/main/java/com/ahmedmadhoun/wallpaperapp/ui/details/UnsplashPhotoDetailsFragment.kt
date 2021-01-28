@@ -28,6 +28,12 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.OnUserEarnedRewardListener
+import com.google.android.gms.ads.rewarded.RewardItem
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
@@ -56,6 +62,7 @@ class UnsplashPhotoDetailsFragment : Fragment(R.layout.fragment_unsplash_photo_d
     }
 
     private lateinit var mContext: Context
+    private val TAG = "AM"
 
     private val args by navArgs<UnsplashPhotoDetailsFragmentArgs>()
     private var _binding: FragmentUnsplashPhotoDetailsBinding? = null
@@ -63,16 +70,27 @@ class UnsplashPhotoDetailsFragment : Fragment(R.layout.fragment_unsplash_photo_d
     var msg: String? = ""
     var lastMsg = ""
     private lateinit var job: Job
+    private lateinit var mRewardedAd: RewardedAd
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         _binding = FragmentUnsplashPhotoDetailsBinding.bind(view)
 
+        // Initialize Rewarded Ad
+        initializeRewardedAd()
+
         setPhotoToImageView()
+
 
         binding.apply {
             btnDownloadPhoto.setOnClickListener {
+                // Show Rewarded Ad
+                if (::mRewardedAd.isInitialized) {
+                    mRewardedAd.show(requireActivity()) {}
+                } else {
+                    Log.d(TAG, "The interstitial ad wasn't ready yet.")
+                }
                 askPermission()
             }
         }
@@ -205,6 +223,27 @@ class UnsplashPhotoDetailsFragment : Fragment(R.layout.fragment_unsplash_photo_d
                 })
                 .into(image_view_details)
         }
+    }
+
+    // Initialize Rewarded Ad
+    private fun initializeRewardedAd() {
+        val adRequest = AdRequest.Builder().build()
+        RewardedAd.load(
+            requireContext(),
+            "ca-app-pub-3940256099942544/5224354917",
+            adRequest,
+            object : RewardedAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    Log.e(
+                        TAG,
+                        "UnsplashPhotoDetailsFragment -> onAdFailedToLoad -> ${adError.message}"
+                    )
+                }
+
+                override fun onAdLoaded(rewardedAd: RewardedAd) {
+                    mRewardedAd = rewardedAd
+                }
+            })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

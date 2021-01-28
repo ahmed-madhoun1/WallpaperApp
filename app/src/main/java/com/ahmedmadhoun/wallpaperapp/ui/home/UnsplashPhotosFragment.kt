@@ -1,11 +1,11 @@
 package com.ahmedmadhoun.wallpaperapp.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
@@ -16,26 +16,37 @@ import androidx.paging.LoadState
 import com.ahmedmadhoun.wallpaperapp.R
 import com.ahmedmadhoun.wallpaperapp.databinding.FragmentUnsplashPhotosBinding
 import com.ahmedmadhoun.wallpaperapp.model.UnsplashPhoto
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_unsplash_photos.*
 
 @AndroidEntryPoint
 class UnsplashPhotosFragment : Fragment(R.layout.fragment_unsplash_photos),
     UnsplashPhotosAdapter.OnItemClickListener {
 
+    private val TAG = "AM"
     private val viewModel by viewModels<UnsplashViewModel>()
-
     private var _binding: FragmentUnsplashPhotosBinding? = null
     private val binding get() = _binding!!
-
     private lateinit var toggle: ActionBarDrawerToggle
+    private lateinit var mInterstitialAd: InterstitialAd
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         _binding = FragmentUnsplashPhotosBinding.bind(view)
 
         initDrawerLayout()
+
+        // Initialize Mobile Ads
+        initializeMobileAds()
+
+        // Initialize Interstitial Ad
+        initializeInterstitialAd()
 
         val adapter = UnsplashPhotosAdapter(this)
 
@@ -157,18 +168,50 @@ class UnsplashPhotosFragment : Fragment(R.layout.fragment_unsplash_photos),
         return super.onOptionsItemSelected(item)
     }
 
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     override fun onItemClick(unsplashPhoto: UnsplashPhoto) {
+        // show Interstitial Ad
+        if (::mInterstitialAd.isInitialized) {
+            mInterstitialAd.show(requireActivity())
+        } else {
+            Log.d(TAG, "The interstitial ad wasn't ready yet.")
+        }
         val action =
             UnsplashPhotosFragmentDirections.actionUnsplashPhotosFragmentToUnsplashPhotoDetailsFragment(
                 unsplashPhoto
             )
         findNavController().navigate(action)
     }
+
+    // Initialize Mobile Ads
+    private fun initializeMobileAds() {
+        MobileAds.initialize(requireContext())
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
+    }
+
+    // Initialize Interstitial Ad
+    private fun initializeInterstitialAd() {
+        val adRequest = AdRequest.Builder().build()
+        InterstitialAd.load(
+            requireContext(),
+            "ca-app-pub-3940256099942544/1033173712",
+            adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                }
+
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                    mInterstitialAd = interstitialAd
+                }
+            })
+
+    }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 
 }
