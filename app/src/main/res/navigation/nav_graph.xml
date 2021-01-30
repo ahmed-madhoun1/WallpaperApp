@@ -16,22 +16,24 @@
             app:destination="@id/unsplashPhotoDetailsFragment" />
         <action
             android:id="@+id/action_unsplashPhotosFragment_to_searchFragment"
-            app:destination="@id/searchFragment" />
+            app:destination="@id/searchFragment"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:popEnterAnim="@anim/slide_out_bottom" />
     </fragment>
     <fragment
         android:id="@+id/unsplashPhotoDetailsFragment"
-        android:name="com.ahmedmadhoun.wallpaperapp.ui.details.UnsplashPhotoDetailsFragment"
+        android:name="com.ahmedmadhoun.wallpaperapp.ui.details.UnsplashPhotosDetailsFragment"
         android:label="Photo"
-        tools:layout="@layout/fragment_unsplash_photo_details" >
+        tools:layout="@layout/fragment_unsplash_photos_details" >
         <argument
             android:name="unsplashPhoto"
             app:argType="com.ahmedmadhoun.wallpaperapp.model.UnsplashPhoto" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.ahmedmadhoun.wallpaperapp.ui.search.SearchFragment"
+        android:name="com.ahmedmadhoun.wallpaperapp.ui.search.UnsplashPhotosSearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" >
+        tools:layout="@layout/fragment_unsplash_photos_search" >
         <action
             android:id="@+id/action_searchFragment_to_unsplashPhotoDetailsFragment"
             app:destination="@id/unsplashPhotoDetailsFragment" />

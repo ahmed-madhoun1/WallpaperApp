@@ -9,21 +9,22 @@
     <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
-        android:progressTint="@color/customColor2"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:indeterminateDrawable="@drawable/custom_progress_color"
+        android:progressTint="@color/customColor2" />
 
     <TextView
         android:id="@+id/text_view_error"
         android:layout_width="wrap_content"
-        android:textColor="@color/white"
         android:layout_height="wrap_content"
-        android:text="Results could not be loaded" />
+        android:text="Results could not be loaded"
+        android:textColor="@color/white" />
 
     <Button
         android:id="@+id/button_retry"
         android:layout_width="wrap_content"
-        android:backgroundTint="@color/customColor2"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/customColor2"
         android:text="Retry" />
 
 </LinearLayout>

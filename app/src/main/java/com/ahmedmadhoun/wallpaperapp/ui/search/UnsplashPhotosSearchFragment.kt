@@ -2,43 +2,43 @@ package com.ahmedmadhoun.wallpaperapp.ui.search
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import com.ahmedmadhoun.wallpaperapp.R
-import com.ahmedmadhoun.wallpaperapp.databinding.FragmentSearchBinding
-import com.ahmedmadhoun.wallpaperapp.databinding.FragmentUnsplashPhotosBinding
+import com.ahmedmadhoun.wallpaperapp.adapters.UnsplashPhotoLoadStateAdapter
+import com.ahmedmadhoun.wallpaperapp.adapters.UnsplashPhotosAdapter
+import com.ahmedmadhoun.wallpaperapp.databinding.FragmentUnsplashPhotosSearchBinding
 import com.ahmedmadhoun.wallpaperapp.model.UnsplashPhoto
-import com.ahmedmadhoun.wallpaperapp.ui.home.UnsplashPhotoLoadStateAdapter
-import com.ahmedmadhoun.wallpaperapp.ui.home.UnsplashPhotosAdapter
-import com.ahmedmadhoun.wallpaperapp.ui.home.UnsplashPhotosFragmentDirections
-import com.ahmedmadhoun.wallpaperapp.ui.home.UnsplashViewModel
+import com.ahmedmadhoun.wallpaperapp.viewmodel.UnsplashViewModel
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import dagger.hilt.android.AndroidEntryPoint
 
-
-class SearchFragment : Fragment(R.layout.fragment_search),
+@AndroidEntryPoint
+class UnsplashPhotosSearchFragment : Fragment(R.layout.fragment_unsplash_photos_search),
     UnsplashPhotosAdapter.OnItemClickListener {
 
     private val TAG = "AM"
     private val viewModel by viewModels<UnsplashViewModel>()
-    private var _binding: FragmentSearchBinding? = null
+    private var _binding: FragmentUnsplashPhotosSearchBinding? = null
     private val binding get() = _binding!!
     private lateinit var mInterstitialAd: InterstitialAd
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        _binding = FragmentSearchBinding.bind(view)
+        _binding = FragmentUnsplashPhotosSearchBinding.bind(view)
+
+        // Initialize Search View
+        initializeSearchView()
 
         // Initialize Mobile Ads
         initializeMobileAds()
@@ -56,7 +56,12 @@ class SearchFragment : Fragment(R.layout.fragment_search),
                 footer = UnsplashPhotoLoadStateAdapter { adapter.retry() }
             )
             buttonRetry.setOnClickListener { adapter.retry() }
+            cardViewBack.setOnClickListener {
+                requireActivity().onBackPressed()
+            }
         }
+
+        viewModel.searchPhotos("")
 
         viewModel.photos.observe(viewLifecycleOwner) {
             adapter.submitData(viewLifecycleOwner.lifecycle, it)
@@ -82,13 +87,10 @@ class SearchFragment : Fragment(R.layout.fragment_search),
             }
         }
 
-
-        initSearchView()
-
     }
 
     // Init Search View
-    private fun initSearchView() {
+    private fun initializeSearchView() {
         binding.apply {
             searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
@@ -101,11 +103,14 @@ class SearchFragment : Fragment(R.layout.fragment_search),
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
+                    if (newText != null) {
+                        binding.recyclerView.scrollToPosition(0)
+                        viewModel.searchPhotos(newText)
+                    }
                     return true
                 }
             })
         }
-
     }
 
     // Initialize Mobile Ads
@@ -142,7 +147,7 @@ class SearchFragment : Fragment(R.layout.fragment_search),
             Log.d(TAG, "The interstitial ad wasn't ready yet.")
         }
         val action =
-            SearchFragmentDirections.actionSearchFragmentToUnsplashPhotoDetailsFragment(
+            UnsplashPhotosSearchFragmentDirections.actionSearchFragmentToUnsplashPhotoDetailsFragment(
                 unsplashPhoto
             )
         findNavController().navigate(action)

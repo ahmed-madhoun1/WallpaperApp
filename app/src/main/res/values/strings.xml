@@ -40,5 +40,9 @@
     <string name="text_version">Version</string>
     <string name="text_instagram">Instagram</string>
     <string name="text_linkedin">Linkedin</string>
+    <string name="text_results_could_not_be_loaded">Results could not be loaded</string>
+    <string name="text_retry">Retry</string>
+    <string name="text_no_results_found_for_this_search_value">No results found for this search value</string>
+    <string name="text_download">Download</string>
 
 </resources>

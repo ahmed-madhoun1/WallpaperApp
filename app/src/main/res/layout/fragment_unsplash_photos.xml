@@ -14,38 +14,69 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/linear_layout"
+        <RelativeLayout
+            android:id="@+id/relative_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:background="@color/customColor2"
-            android:backgroundTint="@color/customColor2"
-            android:gravity="end"
-            android:orientation="vertical"
-            android:padding="20dp">
+            android:backgroundTint="@color/customColor2">
 
-            <ImageView
-                android:id="@+id/image_view_search"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_search" />
-        </LinearLayout>
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_view_menu"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="start"
+                android:background="@color/customColor2"
+                android:backgroundTint="@color/customColor2"
+                android:elevation="0dp"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/icon_menu" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_view_search"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="end|center_vertical"
+                android:background="@color/customColor2"
+                android:backgroundTint="@color/customColor2"
+                android:elevation="0dp"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_search" />
+            </com.google.android.material.card.MaterialCardView>
+
+        </RelativeLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/ad_view"
-            android:layout_below="@+id/linear_layout"
+            android:layout_below="@+id/relative_layout"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
             android:layout_marginHorizontal="5dp"
             android:orientation="vertical"
             android:paddingTop="2dp"
-            app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="2"
             tools:listitem="@layout/item_photo" />
 
@@ -65,6 +96,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:indeterminateDrawable="@drawable/custom_progress_color"
             android:visibility="gone"
             tools:visibility="visible" />
 
@@ -74,7 +106,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@id/button_retry"
             android:layout_centerHorizontal="true"
-            android:text="Results could not be loaded"
+            android:text="@string/text_results_could_not_be_loaded"
             android:textColor="@color/white"
             android:visibility="gone"
             tools:visibility="visible" />
@@ -85,7 +117,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:backgroundTint="@color/customColor2"
-            android:text="Retry"
+            android:text="@string/text_retry"
             android:visibility="gone"
             tools:visibility="visible" />
 

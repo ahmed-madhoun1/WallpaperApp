@@ -4,36 +4,28 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.CalendarContract
 import android.util.Log
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.widget.SearchView
-import androidx.core.content.ContextCompat.getColor
+import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupWithNavController
 import androidx.paging.LoadState
-import com.ahmedmadhoun.wallpaperapp.BuildConfig
-import com.ahmedmadhoun.wallpaperapp.MainActivity
 import com.ahmedmadhoun.wallpaperapp.R
 import com.ahmedmadhoun.wallpaperapp.databinding.FragmentUnsplashPhotosBinding
 import com.ahmedmadhoun.wallpaperapp.model.UnsplashPhoto
-import com.ahmedmadhoun.wallpaperapp.ui.search.SearchFragmentDirections
+import com.ahmedmadhoun.wallpaperapp.adapters.UnsplashPhotoLoadStateAdapter
+import com.ahmedmadhoun.wallpaperapp.adapters.UnsplashPhotosAdapter
+import com.ahmedmadhoun.wallpaperapp.viewmodel.UnsplashViewModel
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_unsplash_photos.*
-import kotlinx.android.synthetic.main.nav_view_header.*
 
 @AndroidEntryPoint
 class UnsplashPhotosFragment : Fragment(R.layout.fragment_unsplash_photos),
@@ -48,7 +40,6 @@ class UnsplashPhotosFragment : Fragment(R.layout.fragment_unsplash_photos),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         _binding = FragmentUnsplashPhotosBinding.bind(view)
 
@@ -71,10 +62,17 @@ class UnsplashPhotosFragment : Fragment(R.layout.fragment_unsplash_photos),
             )
             buttonRetry.setOnClickListener { adapter.retry() }
 
-            image_view_search.setOnClickListener {
+            cardViewSearch.setOnClickListener {
                 val action =
                     UnsplashPhotosFragmentDirections.actionUnsplashPhotosFragmentToSearchFragment()
                 findNavController().navigate(action)
+            }
+            cardViewMenu.setOnClickListener {
+                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                } else {
+                    drawerLayout.openDrawer(GravityCompat.START)
+                }
             }
         }
 
@@ -88,7 +86,6 @@ class UnsplashPhotosFragment : Fragment(R.layout.fragment_unsplash_photos),
                 recyclerView.isVisible = loadState.source.refresh is LoadState.NotLoading
                 buttonRetry.isVisible = loadState.source.refresh is LoadState.Error
                 textViewError.isVisible = loadState.source.refresh is LoadState.Error
-
             }
         }
 

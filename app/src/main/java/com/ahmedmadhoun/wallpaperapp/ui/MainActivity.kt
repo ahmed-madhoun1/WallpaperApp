@@ -1,4 +1,4 @@
-package com.ahmedmadhoun.wallpaperapp
+package com.ahmedmadhoun.wallpaperapp.ui
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -11,6 +11,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.ahmedmadhoun.wallpaperapp.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

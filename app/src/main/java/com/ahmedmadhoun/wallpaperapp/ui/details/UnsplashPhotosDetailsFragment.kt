@@ -13,7 +13,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.ahmedmadhoun.wallpaperapp.R
@@ -46,7 +45,7 @@ import java.io.File
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class UnsplashPhotoDetailsFragment : Fragment(R.layout.fragment_unsplash_photo_details) {
+class UnsplashPhotosDetailsFragment : Fragment(R.layout.fragment_unsplash_photos_details) {
 
     companion object {
         private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1
@@ -54,7 +53,7 @@ class UnsplashPhotoDetailsFragment : Fragment(R.layout.fragment_unsplash_photo_d
 
     private lateinit var mContext: Context
     private val TAG = "AM"
-    private val args by navArgs<UnsplashPhotoDetailsFragmentArgs>()
+    private val args by navArgs<UnsplashPhotosDetailsFragmentArgs>()
     private var _binding: FragmentUnsplashPhotoDetailsBinding? = null
     private val binding get() = _binding!!
     var msg: String? = ""
@@ -87,6 +86,9 @@ class UnsplashPhotoDetailsFragment : Fragment(R.layout.fragment_unsplash_photo_d
                     Log.d(TAG, "The interstitial ad wasn't ready yet.")
                 }
                 askPermission()
+            }
+            cardViewBack.setOnClickListener {
+                requireActivity().onBackPressed()
             }
         }
     }
@@ -189,7 +191,7 @@ class UnsplashPhotoDetailsFragment : Fragment(R.layout.fragment_unsplash_photo_d
 
     private fun setPhotoToImageView() {
         binding.apply {
-            Glide.with(this@UnsplashPhotoDetailsFragment)
+            Glide.with(this@UnsplashPhotosDetailsFragment)
                 .load(args.unsplashPhoto.urls.full)
                 .error(R.drawable.close)
                 .listener(object : RequestListener<Drawable> {
@@ -231,7 +233,7 @@ class UnsplashPhotoDetailsFragment : Fragment(R.layout.fragment_unsplash_photo_d
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     Log.e(
                         TAG,
-                        "UnsplashPhotoDetailsFragment -> onAdFailedToLoad -> ${adError.message}"
+                        "UnsplashPhotosDetailsFragment -> onAdFailedToLoad -> ${adError.message}"
                     )
                 }
 
@@ -299,9 +301,13 @@ class UnsplashPhotoDetailsFragment : Fragment(R.layout.fragment_unsplash_photo_d
         mContext = context
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     override fun onDestroy() {
         super.onDestroy()
-        _binding = null
         if (::job.isInitialized) {
             job.cancel()
         }

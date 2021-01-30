@@ -1,4 +1,4 @@
-package com.ahmedmadhoun.wallpaperapp.ui.home
+package com.ahmedmadhoun.wallpaperapp.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

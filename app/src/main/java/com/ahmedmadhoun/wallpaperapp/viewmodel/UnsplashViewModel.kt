@@ -1,4 +1,4 @@
-package com.ahmedmadhoun.wallpaperapp.ui.home
+package com.ahmedmadhoun.wallpaperapp.viewmodel
 
 import androidx.hilt.Assisted
 import androidx.lifecycle.ViewModel

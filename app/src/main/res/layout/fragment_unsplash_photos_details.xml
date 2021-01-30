@@ -4,7 +4,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.details.UnsplashPhotoDetailsFragment">
+    tools:context=".ui.details.UnsplashPhotosDetailsFragment">
+
+    <RelativeLayout
+        android:id="@+id/relative_layout"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:background="@color/customColor2"
+        android:backgroundTint="@color/customColor2">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_view_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="start"
+            android:background="@color/customColor2"
+            android:backgroundTint="@color/customColor2"
+            android:elevation="0dp"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_arrow" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </RelativeLayout>
 
 
     <com.google.android.material.card.MaterialCardView
@@ -12,10 +44,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/btn_download_photo"
+        android:layout_below="@+id/relative_layout"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_margin="10dp"
+        android:layout_margin="5dp"
         android:backgroundTint="@color/customColor2"
         app:cardCornerRadius="10dp">
 
@@ -41,8 +73,8 @@
         android:layout_marginBottom="5dp"
         android:backgroundTint="@color/customColor2"
         android:padding="10dp"
-        android:text="Download"
-        android:textSize="20dp"
+        android:text="@string/text_download"
+        android:textSize="20sp"
         android:visibility="gone"
         app:cornerRadius="10dp"
         app:icon="@drawable/ic_download"
@@ -56,6 +88,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_gravity="center"
-        android:elevation="1dp" />
+        android:elevation="1dp"
+        android:indeterminateDrawable="@drawable/custom_progress_color" />
 
 </RelativeLayout>
