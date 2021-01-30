@@ -299,13 +299,9 @@ class UnsplashPhotoDetailsFragment : Fragment(R.layout.fragment_unsplash_photo_d
         mContext = context
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     override fun onDestroy() {
         super.onDestroy()
+        _binding = null
         if (::job.isInitialized) {
             job.cancel()
         }

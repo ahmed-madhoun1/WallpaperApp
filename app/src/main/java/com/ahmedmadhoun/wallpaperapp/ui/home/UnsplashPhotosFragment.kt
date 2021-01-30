@@ -1,6 +1,10 @@
 package com.ahmedmadhoun.wallpaperapp.ui.home
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.CalendarContract
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
@@ -8,21 +12,28 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import androidx.paging.LoadState
+import com.ahmedmadhoun.wallpaperapp.BuildConfig
 import com.ahmedmadhoun.wallpaperapp.MainActivity
 import com.ahmedmadhoun.wallpaperapp.R
 import com.ahmedmadhoun.wallpaperapp.databinding.FragmentUnsplashPhotosBinding
 import com.ahmedmadhoun.wallpaperapp.model.UnsplashPhoto
+import com.ahmedmadhoun.wallpaperapp.ui.search.SearchFragmentDirections
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_unsplash_photos.*
+import kotlinx.android.synthetic.main.nav_view_header.*
 
 @AndroidEntryPoint
 class UnsplashPhotosFragment : Fragment(R.layout.fragment_unsplash_photos),
@@ -59,6 +70,12 @@ class UnsplashPhotosFragment : Fragment(R.layout.fragment_unsplash_photos),
                 footer = UnsplashPhotoLoadStateAdapter { adapter.retry() }
             )
             buttonRetry.setOnClickListener { adapter.retry() }
+
+            image_view_search.setOnClickListener {
+                val action =
+                    UnsplashPhotosFragmentDirections.actionUnsplashPhotosFragmentToSearchFragment()
+                findNavController().navigate(action)
+            }
         }
 
         viewModel.photos.observe(viewLifecycleOwner) {
@@ -72,45 +89,34 @@ class UnsplashPhotosFragment : Fragment(R.layout.fragment_unsplash_photos),
                 buttonRetry.isVisible = loadState.source.refresh is LoadState.Error
                 textViewError.isVisible = loadState.source.refresh is LoadState.Error
 
-                // empty view
-                if (loadState.source.refresh is LoadState.NotLoading &&
-                    loadState.append.endOfPaginationReached &&
-                    adapter.itemCount < 1
-                ) {
-                    recyclerView.isVisible = false
-                    textViewEmpty.isVisible = true
-                } else {
-                    textViewEmpty.isVisible = false
-                }
             }
         }
 
         setHasOptionsMenu(true)
+
     }
 
-    // Option Menu
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
+    // On Options Item Selected
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (toggle.onOptionsItemSelected(item)) {
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
-        inflater.inflate(R.menu.menu_unsplash, menu)
-
-        val searchItem = menu.findItem(R.id.action_search)
-        val searchView = searchItem.actionView as SearchView
-
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                if (query != null) {
-                    binding.recyclerView.scrollToPosition(0)
-                    viewModel.searchPhotos(query)
-                    searchView.clearFocus()
-                }
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return true
-            }
-        })
+    // On Recycler View Item Click Listener
+    override fun onItemClick(unsplashPhoto: UnsplashPhoto) {
+        // show Interstitial Ad
+        if (::mInterstitialAd.isInitialized) {
+            mInterstitialAd.show(requireActivity())
+        } else {
+            Log.d(TAG, "The interstitial ad wasn't ready yet.")
+        }
+        val action =
+            UnsplashPhotosFragmentDirections.actionUnsplashPhotosFragmentToUnsplashPhotoDetailsFragment(
+                unsplashPhoto
+            )
+        findNavController().navigate(action)
     }
 
     private fun initDrawerLayout() {
@@ -148,6 +154,10 @@ class UnsplashPhotosFragment : Fragment(R.layout.fragment_unsplash_photos),
                     R.id.item_street_photography -> chooseCategory(getString(R.string.text_street_photography))
                     R.id.item_athletics -> chooseCategory(getString(R.string.text_athletics))
                     R.id.item_interiors -> chooseCategory(getString(R.string.text_interiors))
+                    R.id.item_share_app -> shareApp()
+                    R.id.item_rate_app -> rateApp()
+                    R.id.item_owner_instagram -> ownerLink("https://www.instagram.com/ahmed_madhoun1/")
+                    R.id.item_owner_linkedin -> ownerLink("https://www.linkedin.com/in/ahmed-madhoun-b3b9331ba/")
                 }
                 true
             }
@@ -160,27 +170,6 @@ class UnsplashPhotosFragment : Fragment(R.layout.fragment_unsplash_photos),
             viewModel.searchPhotos(query)
             drawerLayout.closeDrawers()
         }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (toggle.onOptionsItemSelected(item)) {
-            return true
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onItemClick(unsplashPhoto: UnsplashPhoto) {
-        // show Interstitial Ad
-        if (::mInterstitialAd.isInitialized) {
-            mInterstitialAd.show(requireActivity())
-        } else {
-            Log.d(TAG, "The interstitial ad wasn't ready yet.")
-        }
-        val action =
-            UnsplashPhotosFragmentDirections.actionUnsplashPhotosFragmentToUnsplashPhotoDetailsFragment(
-                unsplashPhoto
-            )
-        findNavController().navigate(action)
     }
 
     // Initialize Mobile Ads
@@ -206,6 +195,44 @@ class UnsplashPhotosFragment : Fragment(R.layout.fragment_unsplash_photos),
                 }
             })
 
+    }
+
+    private fun shareApp() {
+        binding.drawerLayout.closeDrawers()
+        val appURL =
+            Uri.parse("play.google.com/store/apps/details?id=${requireActivity().packageName}")
+        val intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, "Hey, Check out this app: $appURL")
+            type = "text/plain"
+        }
+        startActivity(Intent.createChooser(intent, "Share To:"))
+    }
+
+    private fun rateApp() {
+        binding.drawerLayout.closeDrawers()
+        try {
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("market://details?id=${requireActivity().packageName}")
+                )
+            )
+        } catch (e: ActivityNotFoundException) {
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("market://details?id=play.google.com/store/apps/details?id=${requireActivity().packageName}")
+                )
+            )
+        }
+
+    }
+
+    private fun ownerLink(url: String) {
+        val uri = Uri.parse(url)
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+        requireContext().startActivity(intent)
     }
 
     override fun onDestroyView() {

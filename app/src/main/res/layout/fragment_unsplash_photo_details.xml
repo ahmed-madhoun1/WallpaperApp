@@ -16,6 +16,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_margin="10dp"
+        android:backgroundTint="@color/customColor2"
         app:cardCornerRadius="10dp">
 
         <ImageView
@@ -38,6 +39,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="5dp"
+        android:backgroundTint="@color/customColor2"
         android:padding="10dp"
         android:text="Download"
         android:textSize="20dp"

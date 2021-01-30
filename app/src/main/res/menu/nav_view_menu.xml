@@ -1,77 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:id="@+id/group_category"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/item_all"
+            android:checked="true"
+            android:title="@string/text_all" />
+        <item
+            android:id="@+id/item_animals"
+            android:title="@string/text_animals" />
+        <item
+            android:id="@+id/item_nature"
+            android:title="@string/text_nature" />
 
-    <item
-        android:id="@+id/item_all"
-        android:title="@string/text_all" />
-    <item
-        android:id="@+id/item_animals"
-        android:title="@string/text_animals" />
-    <item
-        android:id="@+id/item_nature"
-        android:title="@string/text_nature" />
+        <item
+            android:id="@+id/item_people"
+            android:title="@string/text_people" />
+        <item
+            android:id="@+id/item_wallpapers"
+            android:title="@string/text_wallpapers" />
+        <item
+            android:id="@+id/item_technology"
+            android:title="@string/text_technology" />
+        <item
+            android:id="@+id/item_new_skills"
+            android:title="@string/text_new_skills" />
+        <item
+            android:id="@+id/item_current_events"
+            android:title="@string/text_current_events" />
+        <item
+            android:id="@+id/item_architecture"
+            android:title="@string/text_architecture" />
 
-    <item
-        android:id="@+id/item_people"
-        android:title="@string/text_people" />
-    <item
-        android:id="@+id/item_wallpapers"
-        android:title="@string/text_wallpapers" />
-    <item
-        android:id="@+id/item_technology"
-        android:title="@string/text_technology" />
-    <item
-        android:id="@+id/item_new_skills"
-        android:title="@string/text_new_skills" />
-    <item
-        android:id="@+id/item_current_events"
-        android:title="@string/text_current_events" />
-    <item
-        android:id="@+id/item_architecture"
-        android:title="@string/text_architecture" />
+        <item
+            android:id="@+id/item_fashion"
+            android:title="@string/text_fashion" />
+        <item
+            android:id="@+id/item_business_Work"
+            android:title="@string/text_business_amp_work" />
+        <item
+            android:id="@+id/item_experimental"
+            android:title="@string/text_experimental" />
+        <item
+            android:id="@+id/item_film"
+            android:title="@string/text_film" />
+        <item
+            android:id="@+id/item_health_wellness"
+            android:title="@string/text_health_amp_wellness" />
+        <item
+            android:id="@+id/item_travel"
+            android:title="@string/text_travel" />
+        <item
+            android:id="@+id/item_food_drink"
+            android:title="@string/text_food_amp_drink" />
+        <item
+            android:id="@+id/item_arts_culture"
+            android:title="@string/text_arts_amp_culture" />
+        <item
+            android:id="@+id/item_history"
+            android:title="@string/text_history" />
+        <item
+            android:id="@+id/item_spirituality"
+            android:title="@string/text_spirituality" />
 
-    <item
-        android:id="@+id/item_fashion"
-        android:title="@string/text_fashion" />
-    <item
-        android:id="@+id/item_business_Work"
-        android:title="@string/text_business_amp_work" />
-    <item
-        android:id="@+id/item_experimental"
-        android:title="@string/text_experimental" />
-    <item
-        android:id="@+id/item_film"
-        android:title="@string/text_film" />
-    <item
-        android:id="@+id/item_health_wellness"
-        android:title="@string/text_health_amp_wellness" />
-    <item
-        android:id="@+id/item_travel"
-        android:title="@string/text_travel" />
-    <item
-        android:id="@+id/item_food_drink"
-        android:title="@string/text_food_amp_drink" />
-    <item
-        android:id="@+id/item_arts_culture"
-        android:title="@string/text_arts_amp_culture" />
-    <item
-        android:id="@+id/item_history"
-        android:title="@string/text_history" />
-    <item
-        android:id="@+id/item_spirituality"
-        android:title="@string/text_spirituality" />
+        <item
+            android:id="@+id/item_textures_patterns"
+            android:title="@string/text_textures_amp_patterns" />
+        <item
+            android:id="@+id/item_street_photography"
+            android:title="@string/text_street_photography" />
+        <item
+            android:id="@+id/item_athletics"
+            android:title="@string/text_athletics" />
+        <item
+            android:id="@+id/item_interiors"
+            android:title="@string/text_interiors" />
+    </group>
 
-    <item
-        android:id="@+id/item_textures_patterns"
-        android:title="@string/text_textures_amp_patterns" />
-    <item
-        android:id="@+id/item_street_photography"
-        android:title="@string/text_street_photography" />
-    <item
-        android:id="@+id/item_athletics"
-        android:title="@string/text_athletics" />
-    <item
-        android:id="@+id/item_interiors"
-        android:title="@string/text_interiors" />
+    <group
+        android:id="@+id/group_settings"
+        android:checkableBehavior="none">
+        <item
+            android:id="@+id/item_share_app"
+            android:title="@string/text_share_app" />
+
+        <item
+            android:id="@+id/item_rate_app"
+            android:title="@string/text_rate_app" />
+
+        <item
+            android:id="@+id/item_owner_instagram"
+            android:title="@string/text_instagram" />
+
+        <item
+            android:id="@+id/item_owner_linkedin"
+            android:title="@string/text_linkedin" />
+    </group>
+
 
 </menu>
+
+

@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_unsplashPhotosFragment_to_unsplashPhotoDetailsFragment"
             app:destination="@id/unsplashPhotoDetailsFragment" />
+        <action
+            android:id="@+id/action_unsplashPhotosFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
     <fragment
         android:id="@+id/unsplashPhotoDetailsFragment"
@@ -23,5 +26,14 @@
         <argument
             android:name="unsplashPhoto"
             app:argType="com.ahmedmadhoun.wallpaperapp.model.UnsplashPhoto" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.ahmedmadhoun.wallpaperapp.ui.search.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_unsplashPhotoDetailsFragment"
+            app:destination="@id/unsplashPhotoDetailsFragment" />
     </fragment>
 </navigation>

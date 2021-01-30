@@ -1,49 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/customColor"
+    android:background="@color/customColor2"
     android:gravity="center_vertical"
-    android:orientation="vertical"
-    android:padding="10dp">
+    android:orientation="horizontal"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
 
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@drawable/ahmed_photo" />
+        android:src="@mipmap/ic_launcher_foreground" />
 
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/text_view_app_version"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
+        android:layout_gravity="bottom"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
-        android:text="Instagram: ahmed_madhoun1"
+        android:text="Created by Ahmed Almadhoun"
         android:textColor="@color/white"
-        android:textSize="14sp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:text="LinkedIn: ahmed_madhoun1"
-        android:textColor="@color/white"
-        android:textSize="14sp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:text="This Demo App Made By Ahmed AlMadhoun"
-        android:textColor="@color/white"
-        android:textSize="14sp" />
+        android:textSize="12dp" />
 
 
 </LinearLayout>

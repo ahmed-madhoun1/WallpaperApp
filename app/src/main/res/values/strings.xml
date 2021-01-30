@@ -34,5 +34,11 @@
     <string name="text_health_and_wellness">Health And Wellness</string>
     <string name="text_business_amp_work"><![CDATA[Business & Work]]></string>
     <string name="text_business_and_work">Business And Work</string>
+    <string name="category">Category</string>
+    <string name="text_share_app">Share App</string>
+    <string name="text_rate_app">Rate App</string>
+    <string name="text_version">Version</string>
+    <string name="text_instagram">Instagram</string>
+    <string name="text_linkedin">Linkedin</string>
 
 </resources>

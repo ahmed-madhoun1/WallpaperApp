@@ -1,17 +1,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.WallpaperApp" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.WallpaperApp" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/customColor</item>
-        <item name="colorPrimaryVariant">@color/customColor</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorPrimary">@color/customColor2</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/customColor</item>
-        <!-- Customize your theme here. -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/customColor2</item>
+        <!-- window Background -->
+        <item name="android:windowBackground">@color/customColor</item>
+        <!-- text Color Primary -->
+        <item name="android:textColorPrimary">@color/white</item>
+        <!-- text Color Secondary -->
+        <item name="android:textColorSecondary">@color/white</item>
     </style>
 
 </resources>
