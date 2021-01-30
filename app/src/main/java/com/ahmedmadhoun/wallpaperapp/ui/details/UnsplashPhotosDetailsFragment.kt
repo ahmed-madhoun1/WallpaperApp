@@ -13,10 +13,11 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.ahmedmadhoun.wallpaperapp.R
-import com.ahmedmadhoun.wallpaperapp.databinding.FragmentUnsplashPhotoDetailsBinding
+import com.ahmedmadhoun.wallpaperapp.databinding.FragmentUnsplashPhotosDetailsBinding
 import com.ahmedmadhoun.wallpaperapp.utils.ConnectionType
 import com.ahmedmadhoun.wallpaperapp.utils.NetworkMonitor
 import com.bumptech.glide.Glide
@@ -35,7 +36,7 @@ import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_unsplash_photo_details.*
+import kotlinx.android.synthetic.main.fragment_unsplash_photos_details.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.Main
@@ -54,7 +55,7 @@ class UnsplashPhotosDetailsFragment : Fragment(R.layout.fragment_unsplash_photos
     private lateinit var mContext: Context
     private val TAG = "AM"
     private val args by navArgs<UnsplashPhotosDetailsFragmentArgs>()
-    private var _binding: FragmentUnsplashPhotoDetailsBinding? = null
+    private var _binding: FragmentUnsplashPhotosDetailsBinding? = null
     private val binding get() = _binding!!
     var msg: String? = ""
     var lastMsg = ""
@@ -69,7 +70,7 @@ class UnsplashPhotosDetailsFragment : Fragment(R.layout.fragment_unsplash_photos
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        _binding = FragmentUnsplashPhotoDetailsBinding.bind(view)
+        _binding = FragmentUnsplashPhotosDetailsBinding.bind(view)
 
         // Initialize Rewarded Ad
         initializeRewardedAd()

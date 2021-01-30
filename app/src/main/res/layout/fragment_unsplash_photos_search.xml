@@ -10,8 +10,12 @@
     <LinearLayout
         android:id="@+id/linear_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="70dp"
+        android:background="@color/customColor2"
+        android:backgroundTint="@color/customColor2"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingTop="8dp">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_view_back"

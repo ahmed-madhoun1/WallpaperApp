@@ -14,13 +14,16 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:background="@color/customColor2"
-        android:backgroundTint="@color/customColor2">
+        android:backgroundTint="@color/customColor2"
+        android:gravity="center_vertical"
+        android:paddingTop="8dp">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_view_back"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
             android:layout_alignParentTop="true"
             android:layout_gravity="start"
             android:background="@color/customColor2"
@@ -31,7 +34,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="center_vertical"
                 android:src="@drawable/ic_arrow" />
 
         </com.google.android.material.card.MaterialCardView>
