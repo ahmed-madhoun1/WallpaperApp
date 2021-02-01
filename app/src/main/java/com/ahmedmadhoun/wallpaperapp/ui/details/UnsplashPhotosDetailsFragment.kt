@@ -3,6 +3,7 @@ package com.ahmedmadhoun.wallpaperapp.ui.details
 import android.Manifest
 import android.app.DownloadManager
 import android.content.Context
+import android.content.Intent
 import android.database.Cursor
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -18,8 +19,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.ahmedmadhoun.wallpaperapp.R
 import com.ahmedmadhoun.wallpaperapp.databinding.FragmentUnsplashPhotosDetailsBinding
+import com.ahmedmadhoun.wallpaperapp.ui.MainActivity
 import com.ahmedmadhoun.wallpaperapp.utils.ConnectionType
 import com.ahmedmadhoun.wallpaperapp.utils.NetworkMonitor
+import com.ahmedmadhoun.wallpaperapp.utils.NotificationManagerUtil
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -114,41 +117,79 @@ class UnsplashPhotosDetailsFragment : Fragment(R.layout.fragment_unsplash_photos
             }
         }
 
-        val downloadId = downloadManager.enqueue(request)
-        val query = DownloadManager.Query().setFilterById(downloadId)
 
-        job = CoroutineScope(Default).launch {
-            var downloading = true
-            while (downloading) {
-                val cursor: Cursor = downloadManager.query(query)
-                cursor.moveToFirst()
-                if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_SUCCESSFUL) {
-                    downloading = false
-                }
-                val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
-                msg = statusMessage(status)
-                if (msg != lastMsg) {
-                    try {
-                        job = CoroutineScope(Main).launch {
-                            Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show()
+
+        try {
+            job = CoroutineScope(Default).launch {
+                val downloadId = downloadManager.enqueue(request)
+                val query = DownloadManager.Query().setFilterById(downloadId)
+                var downloading = true
+                while (downloading) {
+                    if (query != null) {
+                        val cursor: Cursor = downloadManager.query(query)
+                        cursor.moveToFirst()
+                        if (cursor.moveToFirst()) {
+                            if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_SUCCESSFUL) {
+                                downloading = false
+                            }
+                            val status =
+                                cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
+                            msg = statusMessage(status)
+                            if (msg != lastMsg) {
+                                try {
+                                    job = CoroutineScope(Main).launch {
+                                        Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show()
+                                    }
+                                } catch (e: Exception) {
+                                    Log.e(TAG, "downloadPhoto: ${e.message}")
+                                }
+                                lastMsg = msg ?: ""
+                            }
+                            cursor.close()
+                        } else {
+                            Log.e(TAG, "Cursor not move to first")
+                            cursor.close()
+                            downloading = false
                         }
-                    } catch (e: Exception) {
-                        Log.e("AM", "downloadPhoto: ${e.message}")
+                    } else {
+                        Log.e(TAG, "Query == null")
+                        downloading = false
                     }
-                    lastMsg = msg ?: ""
+
                 }
-                cursor.close()
             }
+        } catch (e: Exception) {
+            Log.e(TAG, "downloadPhoto: ${e.message}")
         }
     }
 
     private fun statusMessage(status: Int): String {
         return when (status) {
-            DownloadManager.STATUS_FAILED -> "Download has been failed, please try again"
+            DownloadManager.STATUS_FAILED -> {
+                NotificationManagerUtil(requireContext()).apply {
+                    showNotification(
+                        1,
+                        "Wallpapers",
+                        "Download has been failed, please try again",
+                        Intent(requireContext(), MainActivity::class.java)
+                    )
+                }
+                "Download has been failed, please try again"
+            }
             DownloadManager.STATUS_PAUSED -> "Paused"
             DownloadManager.STATUS_PENDING -> "Pending"
             DownloadManager.STATUS_RUNNING -> "Downloading..."
-            DownloadManager.STATUS_SUCCESSFUL -> "Image downloaded successfully"
+            DownloadManager.STATUS_SUCCESSFUL -> {
+                NotificationManagerUtil(requireContext()).apply {
+                    showNotification(
+                        1,
+                        "Wallpapers",
+                        "Image downloaded successfully",
+                        Intent(requireContext(), MainActivity::class.java)
+                    )
+                }
+                "Image downloaded successfully"
+            }
             else -> "There's nothing to download"
         }
     }
@@ -245,39 +286,46 @@ class UnsplashPhotosDetailsFragment : Fragment(R.layout.fragment_unsplash_photos
     }
 
     private fun checkInternetConnection() {
-        networkMonitor.result = { isAvailable, type ->
-            job = CoroutineScope(Main).launch {
-                when (isAvailable) {
-                    true -> {
-                        when (type) {
-                            ConnectionType.Wifi -> {
-                                internetAvailable()
-                            }
-                            ConnectionType.Cellular -> {
-                                internetAvailable()
-                            }
-                            else -> {
+        try {
+            networkMonitor.result = { isAvailable, type ->
+                job = CoroutineScope(Main).launch {
+                    when (isAvailable) {
+                        true -> {
+                            when (type) {
+                                ConnectionType.Wifi -> {
+                                    internetAvailable()
+                                }
+                                ConnectionType.Cellular -> {
+                                    internetAvailable()
+                                }
+                                else -> {
+                                }
                             }
                         }
-                    }
-                    false -> {
-                        internetUnavailable()
+                        false -> {
+                            internetUnavailable()
+                        }
                     }
                 }
+
             }
-
+        } catch (e: Exception) {
+            Log.e(TAG, "checkInternetConnection: ${e.message}")
         }
-
     }
 
     private fun internetUnavailable() {
         networkMonitor.snackbar.show()
-        binding.btnDownloadPhoto.isVisible = false
+        binding.apply {
+            btnDownloadPhoto.isVisible = false
+        }
     }
 
     private fun internetAvailable() {
         networkMonitor.snackbar.dismiss()
-        binding.btnDownloadPhoto.isVisible = true
+        binding.apply {
+            btnDownloadPhoto.isVisible = true
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -302,13 +350,9 @@ class UnsplashPhotosDetailsFragment : Fragment(R.layout.fragment_unsplash_photos
         mContext = context
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     override fun onDestroy() {
         super.onDestroy()
+        _binding = null
         if (::job.isInitialized) {
             job.cancel()
         }

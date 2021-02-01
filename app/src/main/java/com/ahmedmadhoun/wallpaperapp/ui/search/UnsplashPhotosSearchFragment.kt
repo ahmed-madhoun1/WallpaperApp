@@ -56,9 +56,6 @@ class UnsplashPhotosSearchFragment : Fragment(R.layout.fragment_unsplash_photos_
                 footer = UnsplashPhotoLoadStateAdapter { adapter.retry() }
             )
             buttonRetry.setOnClickListener { adapter.retry() }
-            cardViewBack.setOnClickListener {
-                requireActivity().onBackPressed()
-            }
         }
 
         viewModel.searchPhotos("")
@@ -92,6 +89,15 @@ class UnsplashPhotosSearchFragment : Fragment(R.layout.fragment_unsplash_photos_
     // Init Search View
     private fun initializeSearchView() {
         binding.apply {
+            searchView.setIconifiedByDefault(true)
+            searchView.isFocusable = true
+            searchView.isIconified = false
+            searchView.requestFocusFromTouch()
+            searchView.setOnCloseListener {
+                searchView.clearFocus()
+                requireActivity().onBackPressed()
+                true
+            }
             searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     if (query != null) {
