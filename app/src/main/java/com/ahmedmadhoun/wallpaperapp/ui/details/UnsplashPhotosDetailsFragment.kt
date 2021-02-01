@@ -165,17 +165,7 @@ class UnsplashPhotosDetailsFragment : Fragment(R.layout.fragment_unsplash_photos
 
     private fun statusMessage(status: Int): String {
         return when (status) {
-            DownloadManager.STATUS_FAILED -> {
-                NotificationManagerUtil(requireContext()).apply {
-                    showNotification(
-                        1,
-                        "Wallpapers",
-                        "Download has been failed, please try again",
-                        Intent(requireContext(), MainActivity::class.java)
-                    )
-                }
-                "Download has been failed, please try again"
-            }
+            DownloadManager.STATUS_FAILED -> "Download has been failed, please try again"
             DownloadManager.STATUS_PAUSED -> "Paused"
             DownloadManager.STATUS_PENDING -> "Pending"
             DownloadManager.STATUS_RUNNING -> "Downloading..."
