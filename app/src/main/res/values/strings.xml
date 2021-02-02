@@ -45,5 +45,6 @@
     <string name="text_no_results_found_for_this_search_value">No results found for this search value</string>
     <string name="text_download">Download</string>
     <string name="text_search_here">Search here</string>
+    <string name="text_home">Home</string>
 
 </resources>
