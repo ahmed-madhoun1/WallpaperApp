@@ -12,6 +12,7 @@ import androidx.paging.LoadState
 import com.ahmedmadhoun.wallpaperapp.R
 import com.ahmedmadhoun.wallpaperapp.adapters.UnsplashPhotoLoadStateAdapter
 import com.ahmedmadhoun.wallpaperapp.adapters.UnsplashPhotosAdapter
+import com.ahmedmadhoun.wallpaperapp.application.WallpaperApplication
 import com.ahmedmadhoun.wallpaperapp.databinding.FragmentUnsplashPhotosSearchBinding
 import com.ahmedmadhoun.wallpaperapp.model.UnsplashPhoto
 import com.ahmedmadhoun.wallpaperapp.viewmodel.UnsplashViewModel
@@ -123,7 +124,10 @@ class UnsplashPhotosSearchFragment : Fragment(R.layout.fragment_unsplash_photos_
     private fun initializeMobileAds() {
         MobileAds.initialize(requireContext())
         val adRequest = AdRequest.Builder().build()
-        binding.adView.loadAd(adRequest)
+        binding.adView.apply {
+            adUnitId = WallpaperApplication.AD_MOB_ID
+            loadAd(adRequest)
+        }
     }
 
     // Initialize Interstitial Ad
@@ -131,7 +135,7 @@ class UnsplashPhotosSearchFragment : Fragment(R.layout.fragment_unsplash_photos_
         val adRequest = AdRequest.Builder().build()
         InterstitialAd.load(
             requireContext(),
-            "ca-app-pub-3940256099942544/1033173712",
+            WallpaperApplication.AD_MOB_ID,
             adRequest,
             object : InterstitialAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {

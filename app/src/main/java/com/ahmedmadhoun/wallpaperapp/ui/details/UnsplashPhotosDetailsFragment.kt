@@ -18,6 +18,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.ahmedmadhoun.wallpaperapp.R
+import com.ahmedmadhoun.wallpaperapp.application.WallpaperApplication
 import com.ahmedmadhoun.wallpaperapp.databinding.FragmentUnsplashPhotosDetailsBinding
 import com.ahmedmadhoun.wallpaperapp.ui.MainActivity
 import com.ahmedmadhoun.wallpaperapp.utils.ConnectionType
@@ -116,9 +117,6 @@ class UnsplashPhotosDetailsFragment : Fragment(R.layout.fragment_unsplash_photos
                 )
             }
         }
-
-
-
         try {
             job = CoroutineScope(Default).launch {
                 val downloadId = downloadManager.enqueue(request)
@@ -130,6 +128,9 @@ class UnsplashPhotosDetailsFragment : Fragment(R.layout.fragment_unsplash_photos
                         cursor.moveToFirst()
                         if (cursor.moveToFirst()) {
                             if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_SUCCESSFUL) {
+                                downloading = false
+                            }
+                            if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_FAILED) {
                                 downloading = false
                             }
                             val status =
@@ -259,7 +260,7 @@ class UnsplashPhotosDetailsFragment : Fragment(R.layout.fragment_unsplash_photos
         val adRequest = AdRequest.Builder().build()
         RewardedAd.load(
             requireContext(),
-            "ca-app-pub-3940256099942544/5224354917",
+            WallpaperApplication.AD_MOB_ID,
             adRequest,
             object : RewardedAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
@@ -305,16 +306,22 @@ class UnsplashPhotosDetailsFragment : Fragment(R.layout.fragment_unsplash_photos
     }
 
     private fun internetUnavailable() {
-        networkMonitor.snackbar.show()
-        binding.apply {
-            btnDownloadPhoto.isVisible = false
+        try {
+            networkMonitor.snackbar.show()
+            binding.apply {
+                btnDownloadPhoto.isVisible = false
+            }
+        } catch (e: Exception) {
         }
     }
 
     private fun internetAvailable() {
-        networkMonitor.snackbar.dismiss()
-        binding.apply {
-            btnDownloadPhoto.isVisible = true
+        try {
+            networkMonitor.snackbar.dismiss()
+            binding.apply {
+                btnDownloadPhoto.isVisible = true
+            }
+        } catch (e: Exception) {
         }
     }
 

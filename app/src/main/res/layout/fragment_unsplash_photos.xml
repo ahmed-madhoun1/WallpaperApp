@@ -92,8 +92,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            ads:adSize="BANNER"
-            ads:adUnitId="ca-app-pub-3940256099942544/6300978111" />
+            ads:adSize="BANNER" />
 
         <ProgressBar
             android:id="@+id/progress_bar"
