@@ -125,7 +125,6 @@ class UnsplashPhotosSearchFragment : Fragment(R.layout.fragment_unsplash_photos_
         MobileAds.initialize(requireContext())
         val adRequest = AdRequest.Builder().build()
         binding.adView.apply {
-            adUnitId = WallpaperApplication.AD_MOB_ID
             loadAd(adRequest)
         }
     }
@@ -135,7 +134,7 @@ class UnsplashPhotosSearchFragment : Fragment(R.layout.fragment_unsplash_photos_
         val adRequest = AdRequest.Builder().build()
         InterstitialAd.load(
             requireContext(),
-            WallpaperApplication.AD_MOB_ID,
+            getString(R.string.ad_mob_id),
             adRequest,
             object : InterstitialAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {

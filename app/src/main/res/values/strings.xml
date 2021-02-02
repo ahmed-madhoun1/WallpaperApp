@@ -46,5 +46,7 @@
     <string name="text_download">Download</string>
     <string name="text_search_here">Search here</string>
     <string name="text_home">Home</string>
+    <!-- AdMob ID -->
+    <string name="ad_mob_id">ca-app-pub-6699628738766818~6308110057</string>
 
 </resources>

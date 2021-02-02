@@ -260,7 +260,7 @@ class UnsplashPhotosDetailsFragment : Fragment(R.layout.fragment_unsplash_photos
         val adRequest = AdRequest.Builder().build()
         RewardedAd.load(
             requireContext(),
-            WallpaperApplication.AD_MOB_ID,
+            getString(R.string.ad_mob_id),
             adRequest,
             object : RewardedAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
