@@ -184,7 +184,7 @@ class UnsplashPhotosFragment : Fragment(R.layout.fragment_unsplash_photos),
         val adRequest = AdRequest.Builder().build()
         InterstitialAd.load(
             requireContext(),
-            getString(R.string.ad_mob_id),
+            getString(R.string.interstitial_wallpapers_ad_mob_id),
             adRequest,
             object : InterstitialAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
