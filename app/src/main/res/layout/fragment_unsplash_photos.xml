@@ -17,19 +17,19 @@
         <RelativeLayout
             android:id="@+id/relative_layout"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="@dimen/_55sdp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:background="@color/customColor2"
             android:backgroundTint="@color/customColor2"
             android:gravity="center_vertical"
-            android:paddingTop="8dp">
+            android:paddingTop="@dimen/_8sdp">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_view_menu"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_gravity="start"
@@ -50,16 +50,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignStart="@id/card_view_menu"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="@dimen/_50sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:gravity="center_vertical"
                 android:text="@string/text_home"
                 android:textColor="@color/white"
-                android:textSize="24sp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="16dp"
-                android:layout_alignParentTop="true"
-                android:gravity="center_vertical"
-                android:layout_marginStart="60dp"
-                android:layout_alignStart="@id/card_view_menu"
-                />
+                android:textSize="@dimen/_20ssp" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_view_search"
@@ -74,8 +73,8 @@
                 android:gravity="center">
 
                 <ImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
                     android:layout_gravity="center"
                     android:layout_marginTop="5dp"
                     android:gravity="center_vertical"
@@ -92,9 +91,9 @@
             android:layout_below="@+id/relative_layout"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginHorizontal="5dp"
+            android:layout_marginHorizontal="@dimen/_3sdp"
             android:orientation="vertical"
-            android:paddingTop="2dp"
+            android:paddingTop="@dimen/_2sdp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="2"
             tools:listitem="@layout/item_photo" />
@@ -108,7 +107,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             ads:adSize="BANNER"
-            ads:adUnitId="@string/banner_wallpapers_ad_mob_id"/>
+            ads:adUnitId="@string/banner_wallpapers_ad_mob_id" />
 
         <ProgressBar
             android:id="@+id/progress_bar"

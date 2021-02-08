@@ -89,6 +89,12 @@ dependencies {
     def ad_mob_version = "19.7.0"
     implementation "com.google.android.gms:play-services-ads:$ad_mob_version"
 
+    // SSP (Fonts Support)
+    implementation 'com.intuit.ssp:ssp-android:1.0.6'
+
+    // SDP (Views Support)
+    implementation 'com.intuit.sdp:sdp-android:1.0.6'
+
 }
 
 kapt {
