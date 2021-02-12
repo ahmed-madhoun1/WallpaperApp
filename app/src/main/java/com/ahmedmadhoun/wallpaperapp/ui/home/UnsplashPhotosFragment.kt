@@ -4,7 +4,9 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.LayoutDirection
 import android.util.Log
+import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -69,10 +71,10 @@ class UnsplashPhotosFragment : Fragment(R.layout.fragment_unsplash_photos),
                 findNavController().navigate(action)
             }
             cardViewMenu.setOnClickListener {
-                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-                    drawerLayout.closeDrawer(GravityCompat.START)
+                if (drawerLayout.isDrawerOpen(GravityCompat.getAbsoluteGravity(Gravity.LEFT, LayoutDirection.LTR))) {
+                    drawerLayout.closeDrawer(GravityCompat.getAbsoluteGravity(Gravity.LEFT, LayoutDirection.LTR))
                 } else {
-                    drawerLayout.openDrawer(GravityCompat.START)
+                    drawerLayout.openDrawer(GravityCompat.getAbsoluteGravity(Gravity.LEFT, LayoutDirection.LTR))
                 }
             }
         }
