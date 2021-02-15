@@ -138,7 +138,6 @@ class UnsplashPhotosFragment : Fragment(R.layout.fragment_unsplash_photos),
                     R.id.item_wallpapers -> chooseCategory(getString(R.string.text_wallpapers))
                     R.id.item_technology -> chooseCategory(getString(R.string.text_technology))
                     R.id.item_new_skills -> chooseCategory(getString(R.string.text_new_skills))
-                    R.id.item_current_events -> chooseCategory(getString(R.string.text_current_events))
                     R.id.item_architecture -> chooseCategory(getString(R.string.text_architecture))
                     R.id.item_fashion -> chooseCategory(getString(R.string.text_fashion))
                     R.id.item_business_Work -> chooseCategory(getString(R.string.text_business_and_work))

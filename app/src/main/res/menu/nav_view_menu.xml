@@ -27,12 +27,8 @@
             android:id="@+id/item_new_skills"
             android:title="@string/text_new_skills" />
         <item
-            android:id="@+id/item_current_events"
-            android:title="@string/text_current_events" />
-        <item
             android:id="@+id/item_architecture"
             android:title="@string/text_architecture" />
-
         <item
             android:id="@+id/item_fashion"
             android:title="@string/text_fashion" />
