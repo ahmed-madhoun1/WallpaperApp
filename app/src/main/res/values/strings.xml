@@ -46,8 +46,8 @@
     <string name="text_search_here">Search here</string>
     <string name="text_home">Home</string>
     <!-- AdMob ID -->
-    <string name="banner_wallpapers_ad_mob_id">ca-app-pub-6699628738766818/1463627859</string>
-    <string name="interstitial_wallpapers_ad_mob_id">ca-app-pub-6699628738766818/5019729486</string>
-    <string name="rewarded_wallpapers_ad_mob_id">ca-app-pub-6699628738766818/4940016045</string>
+    <string name="banner_wallpapers_ad_mob_id"></string>
+    <string name="interstitial_wallpapers_ad_mob_id"></string>
+    <string name="rewarded_wallpapers_ad_mob_id"></string>
 
 </resources>
