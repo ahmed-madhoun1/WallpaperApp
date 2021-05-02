@@ -29,7 +29,7 @@
         <!-- Here You Need To Add The ( App ID ) From Your App In AdMob -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-6699628738766818~6308110057" /> <!-- Hide The ID On Github-->
+            android:value="" />
 
     </application>
 
